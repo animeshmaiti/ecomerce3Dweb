@@ -37,13 +37,55 @@ const Customizer = () => {
       case "colorpicker":
         return <ColorPicker />
       case "filepicker":
-        return <FilePicker />
+        return <FilePicker
+          file={file}
+          setFile={setFile}
+          readFile={readFile}
+        />
       case "aipicker":
         return <AIPicker />
       default:
         return null;
     }
-  } 
+  }
+  
+  const handleDecals = (type,result)=>{
+    const decalType = DecalTypes[type];
+
+    state[decalType.stateProperty] = result;
+
+    if(!activeEditorTab[decalType.filterTab]){
+      handleActiveFilterTab(decalType.filterTab)
+    }
+  }
+  
+  const handleActiveFilterTab = (tabName) => {
+    switch (tabName) {
+      case "logoShirt":
+        state.isLogoTexture = !activeEditorTab[tabName];
+        break;
+        case "stylishShirt":
+          state.isFullTexture = !activeEditorTab[tabName]; 
+      default:
+        state.isLogoTexture = true;
+        state.isFullTexture = false;
+    }
+    // after setting the state, active filter tab is updated
+    setActiveEditorTab((prevState) =>{
+      return{
+        ...prevState,
+        [tabName]: !prevState[tabName]
+      }
+    })
+  }
+
+  const readFile = (type) =>{
+    reader(file)
+      .then((result)=>{
+        handleDecals(type,result);
+        setActiveEditorTab("");
+      })
+  }
 
   return (
     <AnimatePresence>
@@ -87,8 +129,8 @@ const Customizer = () => {
                 key={tab.name}
                 tab={tab}
                 isFilterTab
-                isActiveTab=""
-                handleClick={() => {}}
+                isActiveTab={activeEditorTab[tab.name]}
+                handleClick={() => handleActiveFilterTab(tab.name)}
               />
             ))}
           </motion.div>
