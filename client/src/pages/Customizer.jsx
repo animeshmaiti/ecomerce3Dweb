@@ -59,6 +59,21 @@ const Customizer = () => {
 
     try {
       //call our backend to generate an ai image!
+      setGeneratingImg(true);
+
+      const response = await fetch ('http://localhost:8080/api/v1/dalle',
+      {
+        method:'POST',
+        headers :{
+          'Content-Type' : 'application/json'
+        },
+        body:JSON.stringify({
+          prompt,
+        })
+      })
+      const data = await response.json();
+
+      handleDecals(type,`data:image/png; base64,${data.photo}`)
     } catch (error) {
       alert(error)
     } finally{
@@ -72,7 +87,7 @@ const Customizer = () => {
 
     state[decalType.stateProperty] = result;
 
-    if(!activeEditorTab[decalType.filterTab]){
+    if(!activeFilterTab[decalType.filterTab]){
       handleActiveFilterTab(decalType.filterTab)
     }
   }
@@ -80,16 +95,18 @@ const Customizer = () => {
   const handleActiveFilterTab = (tabName) => {
     switch (tabName) {
       case "logoShirt":
-        state.isLogoTexture = !activeEditorTab[tabName];
+        state.isLogoTexture = !activeFilterTab[tabName];
         break;
         case "stylishShirt":
-          state.isFullTexture = !activeEditorTab[tabName]; 
+          state.isFullTexture = !activeFilterTab[tabName];
+          break; 
       default:
         state.isLogoTexture = true;
         state.isFullTexture = false;
+        break;
     }
     // after setting the state, active filter tab is updated
-    setActiveEditorTab((prevState) =>{
+    setActiveFilterTab((prevState) =>{
       return{
         ...prevState,
         [tabName]: !prevState[tabName]
@@ -134,7 +151,7 @@ const Customizer = () => {
             <CustomButton
               type="filled"
               title="Go Back"
-              handleClick={() => (state.intro = true)}
+              handleClick={() => state.intro = true}
               customStyles="w-fit px-4 py-2.5 font-bold text-sm"
             />
           </motion.div>
@@ -147,7 +164,7 @@ const Customizer = () => {
                 key={tab.name}
                 tab={tab}
                 isFilterTab
-                isActiveTab={activeEditorTab[tab.name]}
+                isActiveTab={activeFilterTab[tab.name]}
                 handleClick={() => handleActiveFilterTab(tab.name)}
               />
             ))}
