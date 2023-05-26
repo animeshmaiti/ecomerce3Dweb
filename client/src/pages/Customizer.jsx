@@ -9,7 +9,7 @@ import { downloadCanvasToImage, reader } from "../config/helpers";
 import { EditorTabs, FilterTabs, DecalTypes } from "../config/constants";
 import { fadeAnimation, slideAnimation } from "../config/motion";
 import {
-  AIPicker,
+  // AIPicker,
   ColorPicker,
   CustomButton,
   FilePicker,
@@ -42,19 +42,19 @@ const Customizer = () => {
           setFile={setFile}
           readFile={readFile}
         />
-      case "aipicker":
-        return <AIPicker
-          prompt={prompt}
-          setPrompt={setPrompt}
-          generatingImg={generatingImg}
-          handleSubmit={handleSubmit}
-        />
+      // case "aipicker":
+      //   return <AIPicker
+      //     prompt={prompt}
+      //     setPrompt={setPrompt}
+      //     generatingImg={generatingImg}
+      //     handleSubmit={handleSubmit}
+      //   />
       default:
         return null;
     }
   }
   
-  const handleSubmit = async(type) => {
+  /*const handleSubmit = async(type) => {
     if (!prompt) return alert("please enter a prompt");
 
     try {
@@ -81,6 +81,7 @@ const Customizer = () => {
       setActiveEditorTab("");
     }
   }
+  */
 
   const handleDecals = (type,result)=>{
     const decalType = DecalTypes[type];
