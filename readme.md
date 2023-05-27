@@ -32,6 +32,11 @@
 ```bash
  npm install three @react-three/fiber @react-three/drei maath valtio react-color framer-motion
 ```
+### or you can install all the dependencies from my package.json
+
+```bash
+ npm install
+```
 
 ### Install tailwindcss and initialize it
 
